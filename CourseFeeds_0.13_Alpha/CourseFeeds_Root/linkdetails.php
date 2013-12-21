@@ -127,16 +127,14 @@ $version = "0.13 Alpha";
 						//shows the beam button if it is a beamable media)(i.e. video)
 						if($media == "YouTube Video"){ //displaying issues here when no user is logged in, not sure why
 							$orgURL = $URL;
-							$start = 0;
-							$end =  0;
-							for($start; $start < strlen($URL) && ($URL[$start] !='v' && $URL[$start+1] !='='); $start++){ //finds the variable of the video link
-								$URL = substr($URL, $start+2); //restarts the string where the variable starts
-							}
-							for($end; $end <strlen($URL) && $URL[$end] != '&'; $end++){ //finds the end of the variable
-								$URL = substr($URL, 0, $end); //saves the variable
-							}
-							$youtubeEmbedded = "http://www.youtube.com/embed/".$URL.""; //puts the video into the youtube embedded format						
+							
+							parse_str( parse_url( $URL, PHP_URL_QUERY ), $my_array_of_vars );
+													
+							$youtubeEmbedded = "//www.youtube.com/embed/".$my_array_of_vars['v']; //puts the video into the youtube embedded format						
 							echo'
+							<script type="text/javascript">
+								alert("$youtubeEmbedded: '.$youtubeEmbedded.'");
+							</script>
 							<div class="ui-grid-a" style="margin-top:8px;">
 								<div class="ui-block-a">
 									<a href="'.$orgURL.'" target="_blank" data-role="button" data-theme="b" id="play-icon" data-mini="true" data-icon="custom" style="padding:0;">
@@ -304,7 +302,7 @@ $version = "0.13 Alpha";
 										'.stripslashes($title).'
 									</li>
 									<li>
-										<iframe src="'.$youtubeEmbedded. '" width="100%" height="315px" id="iframe1" marginheight="0" frameborder="0" onLoad="autoResize(\'iframe1\');"></iframe>      
+										<iframe src="'.$youtubeEmbedded.'" width="100%" height="315px" id="iframe1" marginheight="0" frameborder="0"></iframe>      
 									</li>
 								</ul>';
 							}else if($media == "Vimeo Video"){ // if mediatype is Vimeo_Video, it embeds the video in page
